@@ -18,7 +18,7 @@ public class myDBClass extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "mydatabase";
 
     // Table Name
-    private static final String TABLE_MEMBER = "members";
+    private static final String TABLE_NAME = "members";
 
 
 
@@ -36,10 +36,14 @@ public class myDBClass extends SQLiteOpenHelper {
 
         Log.d("CREATE TABLE","Create Table Successfully.");
 
+
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
+        onCreate(db);
 
     }
 }

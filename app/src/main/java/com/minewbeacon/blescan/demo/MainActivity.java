@@ -34,6 +34,9 @@ public class MainActivity extends AppCompatActivity {
     private boolean mIsRefreshing;
     private int state;
 
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

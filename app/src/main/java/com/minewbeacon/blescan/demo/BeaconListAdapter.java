@@ -1,6 +1,8 @@
 package com.minewbeacon.blescan.demo;
 
 
+import android.content.Intent;
+import android.os.Build;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,11 +14,14 @@ import com.yuliwuli.blescan.demo.R;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.jar.Attributes;
 
 
 public class BeaconListAdapter extends RecyclerView.Adapter<BeaconListAdapter.MyViewHolder> {
 
     private List<MinewBeacon> mMinewBeacons = new ArrayList<>();
+    String name;
+
 
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -84,7 +89,9 @@ public class BeaconListAdapter extends RecyclerView.Adapter<BeaconListAdapter.My
 
         public void setDataAndUi(MinewBeacon minewBeacon) {
             mMinewBeacon = minewBeacon;
-            mDevice_name.setText(mMinewBeacon.getBeaconValue(BeaconValueIndex.MinewBeaconValueIndex_Name).getStringValue());
+//            mDevice_name.setText(mMinewBeacon.getBeaconValue(BeaconValueIndex.MinewBeaconValueIndex_Name).getStringValue());
+//            mDevice_name.setText(Build.MODEL);
+            mDevice_name.setText(namestaff.name);
             mDevice_mac.setText(mMinewBeacon.getBeaconValue(BeaconValueIndex.MinewBeaconValueIndex_MAC).getStringValue());
             mDevice_uuid.setText("UUID:" + mMinewBeacon.getBeaconValue(BeaconValueIndex.MinewBeaconValueIndex_UUID).getStringValue());
             String battery = mMinewBeacon.getBeaconValue(BeaconValueIndex.MinewBeaconValueIndex_BatteryLevel).getStringValue();

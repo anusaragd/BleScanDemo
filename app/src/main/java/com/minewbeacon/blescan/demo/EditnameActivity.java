@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.minewbeacon.blescan.demo.SQLite.myDBClass;
 import com.yuliwuli.blescan.demo.R;
@@ -34,8 +35,10 @@ public class EditnameActivity extends AppCompatActivity {
         Sub_edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                namestaff.name = name_edit.getText().toString(); // save namestaff
                 Intent intent = new Intent(EditnameActivity.this,MainActivity.class);
                 startActivity(intent);
+                Toast.makeText(getApplicationContext(), name_edit.getText() , Toast.LENGTH_SHORT).show();
 
             }
         });
