@@ -93,6 +93,7 @@ public class BeaconListAdapter extends RecyclerView.Adapter<BeaconListAdapter.My
 //            mDevice_name.setText(Build.MODEL);
             mDevice_name.setText(namestaff.name);
             mDevice_mac.setText(mMinewBeacon.getBeaconValue(BeaconValueIndex.MinewBeaconValueIndex_MAC).getStringValue());
+            namestaff.mac = mDevice_mac.getText().toString(); // save namestaff mac
             mDevice_uuid.setText("UUID:" + mMinewBeacon.getBeaconValue(BeaconValueIndex.MinewBeaconValueIndex_UUID).getStringValue());
             String battery = mMinewBeacon.getBeaconValue(BeaconValueIndex.MinewBeaconValueIndex_BatteryLevel).getStringValue();
             int batt = Integer.parseInt(battery);

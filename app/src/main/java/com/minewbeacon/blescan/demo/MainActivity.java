@@ -31,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
 
     UserRssi comp = new UserRssi();
     private TextView mStart_scan;
+    private TextView mreport;
     private boolean mIsRefreshing;
     private int state;
 
@@ -73,6 +74,7 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         mStart_scan = (TextView) findViewById(R.id.start_scan);
+        mreport = (TextView) findViewById(R.id.report);
 
         mRecycle = (RecyclerView) findViewById(R.id.recyeler);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
@@ -89,6 +91,16 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void initListener() {
+        mreport.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this,ReportActivity.class);
+                startActivity(intent);
+                Toast.makeText(getApplicationContext(), namestaff.mac , Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
         mStart_scan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -6,4 +6,5 @@ package com.minewbeacon.blescan.demo;
 
 public class namestaff {
     public static String name;
+    public static String mac;
 }
