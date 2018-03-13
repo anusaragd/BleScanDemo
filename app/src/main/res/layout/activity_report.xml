@@ -36,7 +36,7 @@
         android:layout_marginLeft="16dp"
         android:layout_marginTop="84dp"
         android:padding="5dp"
-        android:text="Report"
+        android:text="test"
         android:textSize="18sp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
