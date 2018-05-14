@@ -1,3 +1,6 @@
 <resources>
-    <string name="app_name">BleScanDemo_anusara</string>
+    <!--<string name="app_name">BleScanDemo_anusara</string>-->
+    <string name="app_name">BSDemo</string>
+    <!--<string name="app_name">BleScanDemo</string>-->
+    <!--<string name="app_name">BSD_anusara</string>-->
 </resources>

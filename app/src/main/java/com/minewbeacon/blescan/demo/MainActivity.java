@@ -2,7 +2,10 @@ package com.minewbeacon.blescan.demo;
 
 import android.app.Notification;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.app.TaskStackBuilder;
 import android.bluetooth.BluetoothAdapter;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.StrictMode;
@@ -67,39 +70,21 @@ public class MainActivity extends AppCompatActivity {
         initManager();
         checkBluetooth();
         initListener();
-//        notification();
 
-
-//        mnoti = (TextView)findViewById(R.id.noti);
-//        mnoti.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                //++  Minimize App
-//                String userName = namestaff.name.toString();
-//                if(userName != null && !userName.isEmpty()){
-//                    Intent startMain = new Intent(Intent.ACTION_MAIN);
-//                    startMain.addCategory(Intent.CATEGORY_HOME);
-//                    startMain.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//                    startActivity(startMain);
-//                }else{
-//                    Toast.makeText(MainActivity.this,"กรุณาป้อนชื่อ!!!",Toast.LENGTH_LONG).show();
-//                }
-//                //--
-//            }
-//        });
 
 
     }
 
     public void ShowNotification(String Title, String Body, String userName){
+        Context context = MainActivity.this;
         String currentDateTimeString = DateFormat.getDateTimeInstance().format(new Date());
-
         Notification notification =
                 new NotificationCompat.Builder(this) // this is context
                         .setSmallIcon(R.mipmap.ic_launcher)
                         .setContentTitle(Title + "  " + Body)
                         .setContentText(userName + "    " + currentDateTimeString)
                         .setAutoCancel(true)
+//                        .setContentIntent( getPendingIntent(context) )
                         .build();
 
         NotificationManager notificationManager =
@@ -107,13 +92,21 @@ public class MainActivity extends AppCompatActivity {
         notificationManager.notify(1000, notification);
     }
 
+//    private PendingIntent getPendingIntent(Context context, String message) {
+//        Intent intent = new Intent(context, MainActivity.class);
+////        intent.putExtra("MESSAGE", message);
+//        TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
+//        stackBuilder.addParentStack(MainActivity.class);
+//        stackBuilder.addNextIntent(intent);
+//        return stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+//    }
 
     public void  CallWebservice(String mac_addr, String requester) {
 
         String strResponse="";
 
-//        String URL =  "http://" + "203.151.213.80/ibecon/WebService1.asmx";
-        String URL =  "http://" + "10.0.0.166:8080/ibecon/WebService1.asmx";
+        String URL =  "http://" + "203.151.213.80/ibecon/WebService1.asmx";
+//        String URL =  "http://" + "10.0.0.166:8080/ibecon/WebService1.asmx";
         String NAMESPACE = "http://tempuri.org/";
         String METHOD_NAME = "ibecon_status";
         String SOAP_ACTION = "http://tempuri.org/ibecon_status/";
@@ -205,6 +198,7 @@ public class MainActivity extends AppCompatActivity {
                 //++  Minimize App
                 String userName = namestaff.name.toString();
                 if(userName != null && !userName.isEmpty()){
+//                    Intent startMain = new Intent(MainActivity.this,MainActivity.class);
                     Intent startMain = new Intent(Intent.ACTION_MAIN);
                     startMain.addCategory(Intent.CATEGORY_HOME);
                     startMain.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
