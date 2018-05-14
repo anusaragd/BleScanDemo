@@ -3,6 +3,7 @@ package com.minewbeacon.blescan.demo;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -12,11 +13,18 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.minew.beacon.BeaconValueIndex;
 import com.minew.beacon.BluetoothState;
 import com.minew.beacon.MinewBeacon;
 import com.minew.beacon.MinewBeaconManager;
 import com.minew.beacon.MinewBeaconManagerListener;
 import com.yuliwuli.blescan.demo.R;
+
+import org.ksoap2.SoapEnvelope;
+import org.ksoap2.serialization.PropertyInfo;
+import org.ksoap2.serialization.SoapObject;
+import org.ksoap2.serialization.SoapSerializationEnvelope;
+import org.ksoap2.transport.HttpTransportSE;
 
 import java.util.Collections;
 import java.util.List;
@@ -35,6 +43,9 @@ public class MainActivity extends AppCompatActivity {
     private boolean mIsRefreshing;
     private int state;
 
+    private int CountForSend=0;
+
+
 
 
 
@@ -43,12 +54,63 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
+
         initView();
         initManager();
         checkBluetooth();
         initListener();
 
     }
+
+
+    public void  CallWebservice(String mac_addr, String requester) {
+
+        String strResponse="";
+
+        String URL =  "http://" + "203.151.213.80/ibecon/WebService1.asmx";
+        String NAMESPACE = "http://tempuri.org/";
+        String METHOD_NAME = "ibecon_status";
+        String SOAP_ACTION = "http://tempuri.org/ibecon_status/";
+        SoapObject request = new SoapObject(NAMESPACE, METHOD_NAME);
+
+        /**** with parameter *****/
+        PropertyInfo pi;
+
+        pi=new PropertyInfo();
+        pi.setName("serial");
+        pi.setValue(mac_addr);
+        pi.setType(String.class);
+        request.addProperty(pi);
+
+        pi=new PropertyInfo();
+        pi.setName("name");
+        pi.setValue(requester);
+        pi.setType(String.class);
+        request.addProperty(pi);
+
+        SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER12);
+        envelope.dotNet = true;
+        envelope.setOutputSoapObject(request);
+        HttpTransportSE androidHttpTransport = new HttpTransportSE(URL);
+        androidHttpTransport.debug = true;
+        try
+        {
+            androidHttpTransport.call(SOAP_ACTION, envelope);
+            SoapObject response;
+            response= (SoapObject) envelope.bodyIn;
+            strResponse = response.getProperty(0).toString();
+        }
+        catch (Exception e)
+        {
+            //e.printStackTrace();
+            strResponse = e.toString();
+            Toast.makeText(this, strResponse, Toast.LENGTH_SHORT).show();
+        }
+    }
+
+
 
     /**
      * check Bluetooth state
@@ -96,7 +158,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this,ReportActivity.class);
                 startActivity(intent);
-                Toast.makeText(getApplicationContext(), namestaff.mac , Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), namestaff.name , Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -188,6 +250,32 @@ public class MainActivity extends AppCompatActivity {
                         if (state == 1 || state == 2) {
                         } else {
                             mAdapter.setItems(minewBeacons);
+
+                            //+++
+                            CountForSend += 1;
+                            if (CountForSend == 5) {
+                                String strNearBeacon = "";
+                                String userName = "";
+                                try
+                                {
+                                    strNearBeacon =  minewBeacons.get(0).getBeaconValue(BeaconValueIndex.MinewBeaconValueIndex_MAC).getStringValue();
+                                }
+                                catch(Exception ex)
+                                {
+                                    strNearBeacon = "";
+                                }
+
+                                CountForSend = 0;
+                                userName = namestaff.name.toString();
+
+                                if(userName != null && !userName.isEmpty()){
+                                }else{ userName = "unknown"; }
+
+                                //Toast.makeText(getApplicationContext(), strNearBeacon, Toast.LENGTH_SHORT).show();
+//                                ShowNotification("Beacon",strNearBeacon ,userName);
+                                CallWebservice(strNearBeacon, userName);
+                            }
+                            //---
                         }
 
                     }

@@ -17,8 +17,6 @@ public class EditnameActivity extends AppCompatActivity {
 
     Button Sub_edit ;
     EditText name_edit ;
-    SQLiteDatabase db;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,10 +26,10 @@ public class EditnameActivity extends AppCompatActivity {
         myDBClass myDb = new myDBClass(this);
         myDb.getWritableDatabase(); // First method
 
-        name_edit = (EditText) findViewById(R.id.name_editText);
-        name_edit.setText(Build.MODEL);
+        name_edit = (EditText) findViewById(R.id.editText_name);
+//        name_edit.setText(Build.MODEL);
 
-        Sub_edit = (Button)findViewById(R.id.button_editname);
+        Sub_edit = (Button)findViewById(R.id.button_submit);
         Sub_edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
