@@ -23,13 +23,23 @@
             android:text="Start"
             android:textSize="18sp"/>
         <TextView
-            android:id="@+id/report"
+        android:id="@+id/report"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:layout_marginRight="20dp"
+        android:padding="5dp"
+        android:text="Report"
+        android:textSize="18sp"/>
+
+        <TextView
+            android:id="@+id/noti"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="right"
             android:layout_marginRight="20dp"
             android:padding="5dp"
-            android:text="Report"
+            android:text="Notifi"
             android:textSize="18sp"/>
 
     </android.support.v7.widget.Toolbar>

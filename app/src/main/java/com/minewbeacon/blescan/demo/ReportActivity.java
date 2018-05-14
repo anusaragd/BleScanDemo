@@ -31,8 +31,8 @@ public class ReportActivity extends AppCompatActivity {
         initView();
         initListener();
 
-        showReport = (TextView)findViewById(R.id.Showreport);
-        showReport.setText("คุณ "+ namestaff.name + " อยู่ใกล้ " + namestaff.mac + " นี้มากที่สุด");
+//        showReport = (TextView)findViewById(R.id.Showreport);
+//        showReport.setText("คุณ "+ namestaff.name + " อยู่ใกล้ " + namestaff.mac + " นี้มากที่สุด");
     }
 
     private void initView() {

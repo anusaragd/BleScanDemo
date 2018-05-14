@@ -1,10 +1,13 @@
 package com.minewbeacon.blescan.demo;
 
+import android.app.Notification;
+import android.app.NotificationManager;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.NotificationCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -26,7 +29,9 @@ import org.ksoap2.serialization.SoapObject;
 import org.ksoap2.serialization.SoapSerializationEnvelope;
 import org.ksoap2.transport.HttpTransportSE;
 
+import java.text.DateFormat;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -40,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
     UserRssi comp = new UserRssi();
     private TextView mStart_scan;
     private TextView mreport;
+    private TextView mnoti;
     private boolean mIsRefreshing;
     private int state;
 
@@ -61,7 +67,44 @@ public class MainActivity extends AppCompatActivity {
         initManager();
         checkBluetooth();
         initListener();
+//        notification();
 
+
+//        mnoti = (TextView)findViewById(R.id.noti);
+//        mnoti.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                //++  Minimize App
+//                String userName = namestaff.name.toString();
+//                if(userName != null && !userName.isEmpty()){
+//                    Intent startMain = new Intent(Intent.ACTION_MAIN);
+//                    startMain.addCategory(Intent.CATEGORY_HOME);
+//                    startMain.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//                    startActivity(startMain);
+//                }else{
+//                    Toast.makeText(MainActivity.this,"กรุณาป้อนชื่อ!!!",Toast.LENGTH_LONG).show();
+//                }
+//                //--
+//            }
+//        });
+
+
+    }
+
+    public void ShowNotification(String Title, String Body, String userName){
+        String currentDateTimeString = DateFormat.getDateTimeInstance().format(new Date());
+
+        Notification notification =
+                new NotificationCompat.Builder(this) // this is context
+                        .setSmallIcon(R.mipmap.ic_launcher)
+                        .setContentTitle(Title + "  " + Body)
+                        .setContentText(userName + "    " + currentDateTimeString)
+                        .setAutoCancel(true)
+                        .build();
+
+        NotificationManager notificationManager =
+                (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        notificationManager.notify(1000, notification);
     }
 
 
@@ -69,7 +112,8 @@ public class MainActivity extends AppCompatActivity {
 
         String strResponse="";
 
-        String URL =  "http://" + "203.151.213.80/ibecon/WebService1.asmx";
+//        String URL =  "http://" + "203.151.213.80/ibecon/WebService1.asmx";
+        String URL =  "http://" + "10.0.0.166:8080/ibecon/WebService1.asmx";
         String NAMESPACE = "http://tempuri.org/";
         String METHOD_NAME = "ibecon_status";
         String SOAP_ACTION = "http://tempuri.org/ibecon_status/";
@@ -137,6 +181,7 @@ public class MainActivity extends AppCompatActivity {
 
         mStart_scan = (TextView) findViewById(R.id.start_scan);
         mreport = (TextView) findViewById(R.id.report);
+        mnoti = (TextView)findViewById(R.id.noti);
 
         mRecycle = (RecyclerView) findViewById(R.id.recyeler);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
@@ -153,6 +198,24 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void initListener() {
+
+        mnoti.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //++  Minimize App
+                String userName = namestaff.name.toString();
+                if(userName != null && !userName.isEmpty()){
+                    Intent startMain = new Intent(Intent.ACTION_MAIN);
+                    startMain.addCategory(Intent.CATEGORY_HOME);
+                    startMain.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(startMain);
+                }else{
+                    Toast.makeText(MainActivity.this,"กรุณาป้อนชื่อ!!!",Toast.LENGTH_LONG).show();
+                }
+                //--
+            }
+        });
+
         mreport.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -161,7 +224,6 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), namestaff.name , Toast.LENGTH_SHORT).show();
             }
         });
-
 
         mStart_scan.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -253,7 +315,7 @@ public class MainActivity extends AppCompatActivity {
 
                             //+++
                             CountForSend += 1;
-                            if (CountForSend == 5) {
+                            if (CountForSend == 30) {
                                 String strNearBeacon = "";
                                 String userName = "";
                                 try
@@ -272,7 +334,7 @@ public class MainActivity extends AppCompatActivity {
                                 }else{ userName = "unknown"; }
 
                                 //Toast.makeText(getApplicationContext(), strNearBeacon, Toast.LENGTH_SHORT).show();
-//                                ShowNotification("Beacon",strNearBeacon ,userName);
+                                ShowNotification("Beacon",strNearBeacon ,userName);
                                 CallWebservice(strNearBeacon, userName);
                             }
                             //---
