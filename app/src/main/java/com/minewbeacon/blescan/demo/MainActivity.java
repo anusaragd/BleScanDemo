@@ -33,6 +33,7 @@ import org.ksoap2.serialization.SoapSerializationEnvelope;
 import org.ksoap2.transport.HttpTransportSE;
 
 import java.text.DateFormat;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -42,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
     private MinewBeaconManager mMinewBeaconManager;
     private RecyclerView mRecycle;
     private BeaconListAdapter mAdapter;
+//    private BeaconListAdapter mMinewBeacon;
     private static final int REQUEST_ENABLE_BT = 2;
     private boolean isScanning;
 
@@ -53,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
     private int state;
 
     private int CountForSend=0;
+
 
 
 
@@ -101,7 +104,7 @@ public class MainActivity extends AppCompatActivity {
 //        return stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
 //    }
 
-    public void  CallWebservice(String mac_addr, String requester) {
+    public void  CallWebservice(String mac_addr, String requester , String major , String minor) {
 
         String strResponse="";
 
@@ -126,6 +129,20 @@ public class MainActivity extends AppCompatActivity {
         pi.setValue(requester);
         pi.setType(String.class);
         request.addProperty(pi);
+
+        pi=new PropertyInfo();
+        pi.setName("major");
+        pi.setValue(major);
+        pi.setType(String.class);
+        request.addProperty(pi);
+
+        pi=new PropertyInfo();
+        pi.setName("minor");
+        pi.setValue(minor);
+        pi.setType(String.class);
+        request.addProperty(pi);
+
+
 
         SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER12);
         envelope.dotNet = true;
@@ -307,31 +324,42 @@ public class MainActivity extends AppCompatActivity {
                         } else {
                             mAdapter.setItems(minewBeacons);
 
+
+
                             //+++
                             CountForSend += 1;
-                            if (CountForSend == 30) {
+                            if (CountForSend == 1 || CountForSend == 30) {
+
                                 String strNearBeacon = "";
                                 String userName = "";
-                                try
-                                {
-                                    strNearBeacon =  minewBeacons.get(0).getBeaconValue(BeaconValueIndex.MinewBeaconValueIndex_MAC).getStringValue();
-                                }
-                                catch(Exception ex)
-                                {
+                                String major = "";
+                                String minor = "";
+
+
+                                try {
+
+                                    strNearBeacon = minewBeacons.get(0).getBeaconValue(BeaconValueIndex.MinewBeaconValueIndex_MAC).getStringValue();
+                                    major = minewBeacons.get(0).getBeaconValue(BeaconValueIndex.MinewBeaconValueIndex_Major).getStringValue();
+                                    minor = minewBeacons.get(0).getBeaconValue(BeaconValueIndex.MinewBeaconValueIndex_Minor).getStringValue();
+
+
+
+
+                                } catch (Exception ex) {
                                     strNearBeacon = "";
                                 }
-
                                 CountForSend = 0;
                                 userName = namestaff.name.toString();
 
-                                if(userName != null && !userName.isEmpty()){
-                                }else{ userName = "unknown"; }
+                                if (userName != null && !userName.isEmpty()) {
+                                } else {
+                                    userName = "unknown";
+                                }
 
-                                //Toast.makeText(getApplicationContext(), strNearBeacon, Toast.LENGTH_SHORT).show();
-                                ShowNotification("Beacon",strNearBeacon ,userName);
-                                CallWebservice(strNearBeacon, userName);
+                                Toast.makeText(getApplicationContext(), strNearBeacon + " "+ minewBeacons.size() , Toast.LENGTH_SHORT).show();
+                                ShowNotification("Beacon", strNearBeacon, userName);
+                                CallWebservice(strNearBeacon, userName, major, minor);
                             }
-                            //---
                         }
 
                     }
