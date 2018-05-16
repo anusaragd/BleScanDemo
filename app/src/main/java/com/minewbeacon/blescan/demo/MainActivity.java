@@ -50,6 +50,7 @@ public class MainActivity extends AppCompatActivity {
     UserRssi comp = new UserRssi();
     private TextView mStart_scan;
     private TextView mreport;
+    private TextView mrequest;
     private TextView mnoti;
     private boolean mIsRefreshing;
     private int state;
@@ -197,7 +198,8 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         mStart_scan = (TextView) findViewById(R.id.start_scan);
-        mreport = (TextView) findViewById(R.id.report);
+//        mreport = (TextView) findViewById(R.id.report);
+        mrequest = (TextView) findViewById(R.id.request);
         mnoti = (TextView)findViewById(R.id.noti);
 
         mRecycle = (RecyclerView) findViewById(R.id.recyeler);
@@ -238,6 +240,15 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this,ReportActivity.class);
+                startActivity(intent);
+                Toast.makeText(getApplicationContext(), namestaff.name , Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        mrequest.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this,RequestActivity.class);
                 startActivity(intent);
                 Toast.makeText(getApplicationContext(), namestaff.name , Toast.LENGTH_SHORT).show();
             }

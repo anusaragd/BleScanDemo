@@ -55,8 +55,9 @@
             <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
             <!-- </intent-filter> -->
         </activity>
-        <activity android:name="com.minewbeacon.blescan.demo.ReportActivity"></activity>
-        <activity android:name="com.minewbeacon.blescan.demo.InformationActivity"></activity>
+        <activity android:name="com.minewbeacon.blescan.demo.ReportActivity" />
+        <activity android:name="com.minewbeacon.blescan.demo.InformationActivity" />
+        <activity android:name="com.minewbeacon.blescan.demo.RequestActivity"></activity>
     </application>
 
 </manifest>
