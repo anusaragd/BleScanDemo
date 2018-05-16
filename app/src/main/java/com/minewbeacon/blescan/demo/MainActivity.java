@@ -55,7 +55,8 @@ public class MainActivity extends AppCompatActivity {
     private int state;
 
     private int CountForSend=0;
-
+    private int count = 0 ;
+    private int num = 0 ;
 
 
 
@@ -104,7 +105,7 @@ public class MainActivity extends AppCompatActivity {
 //        return stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
 //    }
 
-    public void  CallWebservice(String mac_addr, String requester , String major , String minor) {
+    public void  CallWebservice(String mac_addr, String requester , String major , String minor , int cnt) {
 
         String strResponse="";
 
@@ -140,6 +141,12 @@ public class MainActivity extends AppCompatActivity {
         pi.setName("minor");
         pi.setValue(minor);
         pi.setType(String.class);
+        request.addProperty(pi);
+
+        pi=new PropertyInfo();
+        pi.setName("level");
+        pi.setValue(cnt);
+        pi.setType(Integer.class);
         request.addProperty(pi);
 
 
@@ -328,38 +335,67 @@ public class MainActivity extends AppCompatActivity {
 
                             //+++
                             CountForSend += 1;
-                            if (CountForSend == 1 || CountForSend == 30) {
+                            if (CountForSend == 20) {
 
-                                String strNearBeacon = "";
-                                String userName = "";
+                                int cnt = 1;
+                                int beaconFound=0;
                                 String major = "";
                                 String minor = "";
-
+                                int rssi=-1;
+                                String strNearBeacon = "";
+                                String userName = "";
+                                userName = namestaff.name.toString();
+                                if(userName != null && !userName.isEmpty()) {/**/}
+                                else{ userName = "unknown"; }
 
                                 try {
 
-                                    strNearBeacon = minewBeacons.get(0).getBeaconValue(BeaconValueIndex.MinewBeaconValueIndex_MAC).getStringValue();
-                                    major = minewBeacons.get(0).getBeaconValue(BeaconValueIndex.MinewBeaconValueIndex_Major).getStringValue();
-                                    minor = minewBeacons.get(0).getBeaconValue(BeaconValueIndex.MinewBeaconValueIndex_Minor).getStringValue();
+                                    beaconFound = minewBeacons.size();  // amount of beacon was found
+                                    Toast.makeText(MainActivity.this, String.valueOf(beaconFound),Toast.LENGTH_LONG).show();
+                                    if(beaconFound > 0)
+                                    {
+                                        for (int l = 0; l < beaconFound; l++) {
+                                            major = minewBeacons.get(l).getBeaconValue(BeaconValueIndex.MinewBeaconValueIndex_Major).getStringValue();
+                                            if (major.equals("1")) {  //
+                                                if (cnt <= 3) { // ** send top 3
+
+                                                    minor = minewBeacons.get(l).getBeaconValue(BeaconValueIndex.MinewBeaconValueIndex_Minor).getStringValue();
+                                                    strNearBeacon = minewBeacons.get(l).getBeaconValue(BeaconValueIndex.MinewBeaconValueIndex_MAC).getStringValue();
+                                                    rssi = minewBeacons.get(l).getBeaconValue(BeaconValueIndex.MinewBeaconValueIndex_RSSI).getIntValue();
 
 
 
+                                                    //++
+                                                    ShowNotification("Beacon",strNearBeacon ,userName);
+                                                    CallWebservice(strNearBeacon, userName ,major ,minor, cnt);
+                                                    //--
+                                                    cnt = cnt + 1;
+                                                }
+                                            }
+                                        }
 
-                                } catch (Exception ex) {
-                                    strNearBeacon = "";
+                                    }
+
+                                    if(beaconFound == 0)
+                                    {
+                                        ShowNotification("Beacon","" ,userName);
+                                        CallWebservice("", userName ,"" ,"", 0);
+                                    }
+
                                 }
+                                catch(Exception ex)
+                                {
+                                    //strNearBeacon = "";
+                                    //ShowNotification("Beacon",strNearBeacon ,userName);
+                                    //CallWebservice(strNearBeacon, userName);
+                                }
+
                                 CountForSend = 0;
-                                userName = namestaff.name.toString();
 
-                                if (userName != null && !userName.isEmpty()) {
-                                } else {
-                                    userName = "unknown";
-                                }
-
-                                Toast.makeText(getApplicationContext(), strNearBeacon + " "+ minewBeacons.size() , Toast.LENGTH_SHORT).show();
-                                ShowNotification("Beacon", strNearBeacon, userName);
-                                CallWebservice(strNearBeacon, userName, major, minor);
+                                //ShowNotification("Beacon",strNearBeacon ,userName);
+                                //CallWebservice(strNearBeacon, userName);
                             }
+                            //---
                         }
 
                     }
