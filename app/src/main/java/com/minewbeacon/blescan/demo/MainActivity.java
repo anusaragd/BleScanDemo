@@ -236,14 +236,14 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        mreport.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this,ReportActivity.class);
-                startActivity(intent);
-                Toast.makeText(getApplicationContext(), namestaff.name , Toast.LENGTH_SHORT).show();
-            }
-        });
+//        mreport.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(MainActivity.this,ReportActivity.class);
+//                startActivity(intent);
+//                Toast.makeText(getApplicationContext(), namestaff.name , Toast.LENGTH_SHORT).show();
+//            }
+//        });
 
         mrequest.setOnClickListener(new View.OnClickListener() {
             @Override
