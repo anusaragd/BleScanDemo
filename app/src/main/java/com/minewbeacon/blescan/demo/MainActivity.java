@@ -81,30 +81,26 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void ShowNotification(String Title, String Body, String userName){
-        Context context = MainActivity.this;
         String currentDateTimeString = DateFormat.getDateTimeInstance().format(new Date());
-        Notification notification =
-                new NotificationCompat.Builder(this) // this is context
+        Notification.Builder notification =
+                new Notification.Builder(this) // this is context
                         .setSmallIcon(R.mipmap.ic_launcher)
                         .setContentTitle(Title + "  " + Body)
-                        .setContentText(userName + "    " + currentDateTimeString)
-                        .setAutoCancel(true)
-//                        .setContentIntent( getPendingIntent(context) )
-                        .build();
+                        .setContentText(userName + "    " + currentDateTimeString);
 
-        NotificationManager notificationManager =
+        Intent resultIntent = new Intent(this, MainActivity.class);
+        resultIntent.setAction(Intent.ACTION_MAIN);
+        resultIntent.addCategory(Intent.CATEGORY_LAUNCHER);
+
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0,
+                resultIntent, 0);
+
+        notification.setContentIntent(pendingIntent);
+        NotificationManager mNotificationManager =
                 (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-        notificationManager.notify(1000, notification);
+        mNotificationManager.notify(1, notification.build());
     }
 
-//    private PendingIntent getPendingIntent(Context context, String message) {
-//        Intent intent = new Intent(context, MainActivity.class);
-////        intent.putExtra("MESSAGE", message);
-//        TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
-//        stackBuilder.addParentStack(MainActivity.class);
-//        stackBuilder.addNextIntent(intent);
-//        return stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
-//    }
 
     public void  CallWebservice(String mac_addr, String requester , String major , String minor , int cnt) {
 
