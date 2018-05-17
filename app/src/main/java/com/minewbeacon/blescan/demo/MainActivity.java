@@ -92,8 +92,7 @@ public class MainActivity extends AppCompatActivity {
         resultIntent.setAction(Intent.ACTION_MAIN);
         resultIntent.addCategory(Intent.CATEGORY_LAUNCHER);
 
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0,
-                resultIntent, 0);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, resultIntent, 0);
 
         notification.setContentIntent(pendingIntent);
         NotificationManager mNotificationManager =
@@ -194,6 +193,13 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         mStart_scan = (TextView) findViewById(R.id.start_scan);
+
+
+//        if (isScanning) {
+//            isScanning = true;
+//            mStart_scan.setText("Stop");
+//            mStart_scan.getText();
+//        }
 //        mreport = (TextView) findViewById(R.id.report);
         mrequest = (TextView) findViewById(R.id.request);
         mnoti = (TextView)findViewById(R.id.noti);
@@ -374,6 +380,7 @@ public class MainActivity extends AppCompatActivity {
 
                                                     //++
                                                     ShowNotification("Beacon",strNearBeacon ,userName);
+                                                    Toast.makeText(MainActivity.this, String.valueOf(beaconFound)+ "  " + cnt,Toast.LENGTH_LONG).show();
                                                     CallWebservice(strNearBeacon, userName ,major ,minor, cnt);
                                                     //--
                                                     cnt = cnt + 1;
